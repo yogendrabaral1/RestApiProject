@@ -32,7 +32,7 @@ app.post('/users', (req, res) => {
     }
     console.log(req.body);
     users.push(user);
-    res.json(user);
+    res.status(201).json(user);
 });
 
 // READ
@@ -45,9 +45,13 @@ app.put('/users/:id', (req, res) => {
     const { id } = req.params;
     const { name, email, age } = req.body;
     const user = users.find(user => user.id === id);
-    if (name) user.name = name;
-    if (email) user.email = email;
-    if (age) user.age = age;
+    if(!user){
+        res.status(400).json({ message: 'User not found' });
+    }else {
+        if (name) user.name = name;
+        if (email) user.email = email;
+        if (age) user.age = age;
+    }
     res.json(user);
 });
 
